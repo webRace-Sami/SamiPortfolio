@@ -20,7 +20,7 @@ app.use(cors({
 }));
 
 // Register API routes
-import contactRouter from './routes/contact.ts';
+import contactRouter from './routes/contact.js';
 app.use('/api/contact', contactRouter);
 
 

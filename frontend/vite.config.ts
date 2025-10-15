@@ -14,4 +14,10 @@ export default defineConfig({
       },
     },
   },
+  // Add this for SPA routing and to make build behavior explicit
+  build: {
+    rollupOptions: {
+      external: []
+    }
+  }
 })

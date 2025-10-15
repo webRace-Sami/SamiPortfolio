@@ -1,7 +1,6 @@
-import express from "express";
-import type { Request, Response } from "express";
-import Contact from "../models/Contact.ts";
-import { sendContactEmail } from "../services/emailServices.ts"; // Import email service
+import express, { Request, Response } from "express";
+import Contact from "../models/Contact.js";
+import { sendContactEmail } from "../services/emailServices.js"; // Import email service
 
 const router = express.Router();
 

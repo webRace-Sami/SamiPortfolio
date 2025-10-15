@@ -21,7 +21,8 @@ function Contact() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://localhost:5001/api/contact', {
+        // For Vercel deployment we call the serverless function at a relative path
+        const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
