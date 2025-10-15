@@ -1,18 +1,18 @@
 {
   "version": 2,
+  "outputDirectory": "frontend/dist",
   "builds": [
     {
-      "src": "package.json",
+      "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "frontend/dist",
-        "buildCommand": "npm run build --prefix frontend"
+        "distDir": "dist",
+        "buildCommand": "npm run build"
       }
     },
     { "src": "api/*.ts", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.ts" },
-    { "src": "/(.*)", "dest": "/frontend/dist/$1" }
+    { "src": "/api/(.*)", "dest": "/api/$1.ts" }
   ]
 }
