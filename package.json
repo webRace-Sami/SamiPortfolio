@@ -1,0 +1,16 @@
+{
+  "name": "sami-portfolio-root",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm run build --prefix frontend"
+  },
+  "dependencies": {
+    "@vercel/node": "^5.3.26",
+    "mongoose": "^7.8.7",
+    "nodemailer": "^6.10.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^7.0.2"
+  }
+}
