@@ -38,25 +38,33 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Connect to MongoDB and start server
-mongoose.connect(process.env.MONGODB_URI!)
-  .then(() => {
-    console.log('Connected to MongoDB');
-    
-    const server = app.listen(PORT, HOST, () => {
-      console.log(`Server is running on http://${HOST}:${PORT}`);
-    });
+// Connect to MongoDB and conditionally start the server
+async function startServer() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI!)
+    console.log('Connected to MongoDB')
 
-    server.on('error', (err: any) => {
-      if (err.code === 'EADDRINUSE') {
-        console.error(`Port ${PORT} is already in use. Please free the port or set PORT env var.`);
+    // Only start a long-running server when not running in Vercel serverless environment
+    if (!process.env.VERCEL) {
+      const server = app.listen(PORT, HOST, () => {
+        console.log(`Server is running on http://${HOST}:${PORT}`);
+      });
+
+      server.on('error', (err: any) => {
+        if (err.code === 'EADDRINUSE') {
+          console.error(`Port ${PORT} is already in use. Please free the port or set PORT env var.`);
+          process.exit(1);
+        }
+        console.error('Server error:', err);
         process.exit(1);
-      }
-      console.error('Server error:', err);
-      process.exit(1);
-    });
-  })
-  .catch((error) => {
+      });
+    }
+  } catch (error) {
     console.error('MongoDB connection error:', error);
-    process.exit(1);
-  });
+    if (!process.env.VERCEL) process.exit(1);
+  }
+}
+
+startServer()
+
+export default app
