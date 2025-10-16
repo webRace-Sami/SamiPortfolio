@@ -1,3 +1,5 @@
+import SamiImg from './images/sami.png'
+
 function Home () {
   return (
    <section id="home" className="home-section">
@@ -31,7 +33,7 @@ function Home () {
         </div>
 
         <div className="home-image">
-          <img src="src/components/images/sami.png" alt="Sami Ullah" />
+          <img src={SamiImg} alt="Sami Ullah" />
         </div>
     </div>
    </section>

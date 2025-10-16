@@ -1,3 +1,5 @@
+import SamiImg from './images/sami.png'
+
 function About () {
     return (
         <section id="about" className="about-section">
@@ -6,7 +8,7 @@ function About () {
                     <h2>About Me</h2>
 
                     <div className="about-image">
-                        <img src="src/components/images/sami.png" alt="About Me" />
+                        <img src={SamiImg} alt="About Me" />
                     </div>
 
                     <p className="about-text">
