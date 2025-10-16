@@ -8,6 +8,6 @@
   }
   ,
   "scripts": {
-    "build": "npm run build --prefix frontend && rm -rf dist && cp -a frontend/dist dist"
+    "build": "(cd frontend && npm install --no-audit --no-fund) && npm run build --prefix frontend && rm -rf dist && cp -a frontend/dist dist"
   }
 }
