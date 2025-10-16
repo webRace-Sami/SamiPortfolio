@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 // More specific CORS for frontend (fix typo and allow credentials)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['https://sami-portfolio-r9kzg9msp-webrace-samis-projects.vercel.app/'],
   credentials: true
 }));
 
