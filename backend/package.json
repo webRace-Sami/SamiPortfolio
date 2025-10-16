@@ -5,8 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --import 'ts-node/esm' server.ts",
-    "dev": "nodemon --exec \"node --import 'ts-node/esm' server.ts\"",
+    "start": "node --loader ts-node/esm server.ts",
+    "dev": "nodemon --exec \"node --loader ts-node/esm server.ts\"",
     "build": "tsc"
   },
   "keywords": [],

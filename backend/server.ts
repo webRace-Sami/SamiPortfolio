@@ -20,8 +20,28 @@ app.use(cors({
 }));
 
 // Register API routes
-import contactRouter from './routes/contact.js';
-app.use('/api/contact', contactRouter);
+// Dynamically resolve the contact router to be resilient across runtimes (ts-node / compiled JS)
+async function loadRoutes() {
+  try {
+    // try compiled JS first
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const mod = await import('./routes/contact.js');
+    app.use('/api/contact', mod.default || mod);
+  } catch (e1) {
+    try {
+      // fallback to TS source (ts-node / dev)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const mod = await import('./routes/contact');
+      app.use('/api/contact', mod.default || mod);
+    } catch (e2) {
+      console.error('Failed to load contact route:', e1, e2);
+    }
+  }
+}
+
+loadRoutes();
 
 
 // Test routes
