@@ -1,24 +1,6 @@
 import express, { Request, Response } from "express";
-
-// Dynamically import model and service so this file works in both ts-node and compiled JS
-let Contact: any
-let sendContactEmail: any
-(async () => {
-  try {
-    const m = await import('../models/Contact.js')
-    Contact = m.default || m
-  } catch (_) {
-    const m = await import('../models/Contact.ts')
-    Contact = m.default || m
-  }
-  try {
-    const s = await import('../services/emailServices.js')
-    sendContactEmail = s.sendContactEmail || s.default || s
-  } catch (_) {
-    const s = await import('../services/emailServices.ts')
-    sendContactEmail = s.sendContactEmail || s.default || s
-  }
-})();
+import Contact from "../models/Contact.js";
+import { sendContactEmail } from "../services/emailServices.js"; // Import email service
 
 const router = express.Router();
 
