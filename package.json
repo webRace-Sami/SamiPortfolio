@@ -1,8 +1,13 @@
 {
   "dependencies": {
-    "mongoose": "^8.19.1"
+    "mongoose": "^8.19.1",
+    "nodemailer": "^6.9.4"
   },
   "devDependencies": {
     "@types/nodemailer": "^7.0.2"
+  }
+  ,
+  "scripts": {
+    "build": "npm run build --prefix frontend && rm -rf dist && cp -a frontend/dist dist"
   }
 }
