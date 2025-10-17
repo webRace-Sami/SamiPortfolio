@@ -7,6 +7,7 @@ const router = express.Router();
 // POST - Handle contact form submission
 router.post('/', async (req: Request, res: Response) => {
   try {
+    console.log('Incoming /api/contact payload:', req.body);
     const { name, email, subject, message } = req.body;
 
     // Step 1: Validate required fields

@@ -56,6 +56,14 @@ export const sendContactEmail = async (emailData: EmailData): Promise<void> => {
   `;
 
   try {
+    // Verify transporter configuration (small timeout)
+    try {
+      await transporter.verify();
+      console.log('SMTP transporter verified');
+    } catch (verifyErr) {
+      console.warn('SMTP transporter verification failed:', verifyErr);
+    }
+
     const info = await transporter.sendMail({
       from: from as string,
       to: to as string,
