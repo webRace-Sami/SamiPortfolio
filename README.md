@@ -20,7 +20,7 @@ In main folder create two folder with terminal: mkdir ‘folder-name’ frontend
 5. “npm install -D nodemon typescript @types/node @types/express ts-node”
 6. Create server.ts file in backend then import all dependencies
 7. Create .env file in backend to connect with MongoDB
-8. SMTP added and nodemailer
+8. SMTP added and Resend integration (replaced Nodemailer)
 
 10. Npm create vite@latest frontend — —template react-ts    “this will create frontend and react project with Typescript”
 11. Install dependencies in frontend by “npm install”
@@ -33,5 +33,5 @@ In main folder create two folder with terminal: mkdir ‘folder-name’ frontend
 
 Problems: 
 I faced problems when created contact form active for mail. 
-Here is used Nodemailer and install by “npm install nodemailer”
+Here is used Resend and install by “npm install resend" (set RESEND_API_KEY in env)
 
