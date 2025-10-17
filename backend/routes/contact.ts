@@ -29,18 +29,14 @@ router.post('/', async (req: Request, res: Response) => {
     await newContact.save();
     console.log('✅ Contact saved to database');
 
-    // Step 3: Send email notification
-    try {
-      await sendContactEmail({ name, email, subject, message });
-    } catch (emailError) {
-      console.log('⚠️ Email not sent, but contact saved to database');
-      // Don't fail the request if email fails
-    }
+    // Step 3: Send email notification and include result in response
+    const emailResult = await sendContactEmail({ name, email, subject, message });
 
-    // Step 4: Send success response
+    // Step 4: Send success response with email metadata
     res.status(200).json({
       success: true,
-      message: 'Message sent successfully!'
+      message: 'Message sent successfully!',
+      email: emailResult || null
     });
 
   } catch (error) {
