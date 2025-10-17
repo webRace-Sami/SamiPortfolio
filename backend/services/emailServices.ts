@@ -9,21 +9,17 @@ interface EmailData {
 }
 
 function createTransport() {
-  const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587;
-  const secure = process.env.SMTP_SECURE === 'true';
 
-  if (!host || !user || !pass) {
-    console.warn('SMTP not configured; emails will be skipped. Set SMTP_HOST/SMTP_USER/SMTP_PASS to enable email sending.');
+  // Use Gmail service instead of manual SMTP configuration
+  if (!user || !pass) {
+    console.warn('SMTP not configured; emails will be skipped. Set SMTP_USER/SMTP_PASS to enable email sending.');
     return null;
   }
 
   return nodemailer.createTransport({
-    host,
-    port,
-    secure,
+    service: 'gmail',  // Use Gmail service - auto-configures host/port/secure
     auth: {
       user,
       pass,
@@ -35,8 +31,8 @@ export const sendContactEmail = async (emailData: EmailData): Promise<void> => {
   const transporter = createTransport();
   if (!transporter) return; // no-op when SMTP not configured
 
-  const from = process.env.SMTP_FROM || process.env.SMTP_USER;
-  const to = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
+  const from = process.env.SMTP_USER; // Use SMTP_USER as from address
+  const to = process.env.CONTACT_RECEIVER_EMAIL;
   const subject = `Portfolio Contact: ${emailData.subject || '(no subject)'}`;
 
   const html = `
