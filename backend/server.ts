@@ -15,33 +15,13 @@ app.use(cors());
 app.use(express.json());
 // More specific CORS for frontend (fix typo and allow credentials)
 app.use(cors({
-  origin: ['https://sami-portfolio-r9kzg9msp-webrace-samis-projects.vercel.app'],
+  origin: 'https://sami-portfolio-nine.vercel.app',
   credentials: true
 }));
 
 // Register API routes
-// Dynamically resolve the contact router to be resilient across runtimes (ts-node / compiled JS)
-async function loadRoutes() {
-  try {
-    // try compiled JS first
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const mod = await import('./routes/contact.js');
-    app.use('/api/contact', mod.default || mod);
-  } catch (e1) {
-    try {
-      // fallback to TS source (ts-node / dev)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const mod = await import('./routes/contact');
-      app.use('/api/contact', mod.default || mod);
-    } catch (e2) {
-      console.error('Failed to load contact route:', e1, e2);
-    }
-  }
-}
-
-loadRoutes();
+import contactRouter from './routes/contact.js';
+app.use('/api/contact', contactRouter);
 
 
 // Test routes
@@ -58,33 +38,25 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Connect to MongoDB and conditionally start the server
-async function startServer() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI!)
-    console.log('Connected to MongoDB')
+// Connect to MongoDB and start server
+mongoose.connect(process.env.MONGODB_URI!)
+  .then(() => {
+    console.log('Connected to MongoDB');
+    
+    const server = app.listen(PORT, HOST, () => {
+      console.log(`Server is running on http://${HOST}:${PORT}`);
+    });
 
-    // Only start a long-running server when not running in Vercel serverless environment
-    if (!process.env.VERCEL) {
-      const server = app.listen(PORT, HOST, () => {
-        console.log(`Server is running on http://${HOST}:${PORT}`);
-      });
-
-      server.on('error', (err: any) => {
-        if (err.code === 'EADDRINUSE') {
-          console.error(`Port ${PORT} is already in use. Please free the port or set PORT env var.`);
-          process.exit(1);
-        }
-        console.error('Server error:', err);
+    server.on('error', (err: any) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Please free the port or set PORT env var.`);
         process.exit(1);
-      });
-    }
-  } catch (error) {
+      }
+      console.error('Server error:', err);
+      process.exit(1);
+    });
+  })
+  .catch((error) => {
     console.error('MongoDB connection error:', error);
-    if (!process.env.VERCEL) process.exit(1);
-  }
-}
-
-startServer()
-
-export default app
+    process.exit(1);
+  });
