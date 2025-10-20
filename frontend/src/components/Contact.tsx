@@ -71,15 +71,15 @@ function Contact() {
             <h3>Let's Connect</h3>
             <div className="contact-item">
               <strong>Email:</strong>
-              <span>your.email@example.com</span>
+              <span>samiullahnawaz942@gmail.com</span>
             </div>
             <div className="contact-item">
               <strong>Phone:</strong>
-              <span>+123 456 7890</span>
+              <span>+92 3428090699</span>
             </div>
             <div className="contact-item">
               <strong>Location:</strong>
-              <span>Your City, Country</span>
+              <span>Gujranwala, Pakistan</span>
             </div>
             
             <div className="social-links">
