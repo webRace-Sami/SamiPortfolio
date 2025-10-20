@@ -29,6 +29,16 @@ export const sendContactEmail = async (emailData: EmailData): Promise<any> => {
   const fromAddr = process.env.RESEND_FROM || process.env.SMTP_FROM || process.env.SMTP_USER;
   const toAddr = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
 
+  // Validate required fields for Resend
+  if (!fromAddr) {
+    console.error('Missing RESEND_FROM (or SMTP_FROM/SMTP_USER). Aborting send.');
+    return { error: 'Missing sender address (RESEND_FROM)' };
+  }
+  if (!toAddr) {
+    console.error('Missing CONTACT_RECEIVER_EMAIL (or SMTP_USER). Aborting send.');
+    return { error: 'Missing recipient address (CONTACT_RECEIVER_EMAIL)' };
+  }
+
   const subject = `Portfolio Contact: ${emailData.subject}`;
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

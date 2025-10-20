@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { pathToFileURL } from 'url';
 
 // Load environment variables
 dotenv.config();
@@ -75,7 +76,15 @@ mongoose.connect(process.env.MONGODB_URI!)
     // Only start the HTTP server when this file is run directly (local dev)
     // or when not running in a serverless environment.
     const isServerless = !!process.env.VERCEL || !!process.env.FUNCTIONS_ENV;
-    if (!isServerless && require.main === module) {
+    // ESM-safe check for "main" module (replace require.main === module)
+    let isMain = false;
+    try {
+      isMain = Boolean(process.argv && process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url);
+    } catch (e) {
+      isMain = false;
+    }
+
+    if (!isServerless && isMain) {
       const server = app.listen(PORT, HOST, () => {
         console.log(`Server is running on http://${HOST}:${PORT}`);
       });
@@ -96,7 +105,14 @@ mongoose.connect(process.env.MONGODB_URI!)
     console.error('MongoDB connection error:', error);
     // In serverless contexts it's often better to throw so the platform logs it
     // and marks the deployment as failed. Locally, exit with error.
-    if (require.main === module) process.exit(1);
+    if (typeof process !== 'undefined') {
+      try {
+        const isMainCatch = Boolean(process.argv && process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url);
+        if (isMainCatch) process.exit(1);
+      } catch (e) {
+        // ignore
+      }
+    }
     throw error;
   });
 
