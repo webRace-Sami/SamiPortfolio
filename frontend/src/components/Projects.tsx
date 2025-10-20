@@ -1,28 +1,28 @@
 function Projects () {
     const projects = [
         {
-            title: "E-Commerce Website",
-            description: "Full-stack e-commerce plateform with MERN stack",
-            // image: "src/components/images/sami.png",
-            technologies: ["React", "Node.js", "MongoDB", "Express"],
-            github: "",
-            live: ""
-        },
-        {
-            title: "Task Management App",
+            title: "Portfolio Website",
             description: "Full-stack e-commerce plateform with MERN stack",
             // image: "src/components/sami.png",
-            technologies: ["React", "Node.js", "MongoDB", "Express"],
-            github: "",
-            live: ""
+            technologies: ["React", "Node.js", "MongoDB", "Express", "TypeScript", "Vite"],
+            github: "https://github.com/webRace-Sami/SamiPortfolio",
+            live: "https://sami-portfolio-nine.vercel.app"
         },
         {
             title: "Portfolio Website",
             description: "Full-stack e-commerce plateform with MERN stack",
             // image: "src/components/sami.png",
-            technologies: ["React", "Node.js", "MongoDB", "Express"],
-            github: "",
-            live: ""
+            technologies: ["React", "Node.js", "MongoDB", "Express", "TypeScript", "Vite"],
+            github: "https://github.com/webRace-Sami/SamiPortfolio",
+            live: "https://sami-portfolio-nine.vercel.app"
+        },
+        {
+            title: "Portfolio Website",
+            description: "Full-stack e-commerce plateform with MERN stack",
+            // image: "src/components/sami.png",
+            technologies: ["React", "Node.js", "MongoDB", "Express", "TypeScript", "Vite"],
+            github: "https://github.com/webRace-Sami/SamiPortfolio",
+            live: "https://sami-portfolio-nine.vercel.app"
         }
     ];
 
