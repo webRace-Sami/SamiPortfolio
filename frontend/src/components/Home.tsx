@@ -27,8 +27,8 @@ function Home () {
         </div>
 
         <div className="social-links">
-          <a href="https://github.com/yourusername" className="social-btn" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href="https://linkedin.com/in/yourusername" className="social-btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/webRace-Sami" className="social-btn" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/sami-ullah-215272277/" className="social-btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
         </div>
 
