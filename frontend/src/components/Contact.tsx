@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // CHANGED: Added useEffect for auto-hide
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -8,6 +8,19 @@ function Contact() {
     message: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  // CHANGED: Added state for styled alerts
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
+
+  // CHANGED: Auto-hide alert after 5 seconds
+  useEffect(() => {
+    if (alertMessage) {
+      const timer = setTimeout(() => {
+        setAlertMessage('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [alertMessage]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -19,6 +32,7 @@ function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setAlertMessage(''); // CHANGED: Clear previous alerts on new submission
     
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -39,7 +53,9 @@ function Contact() {
       const result = await response.json();
       
       if (result.success) {
-        alert('Message sent successfully!');
+        // CHANGED: Replaced alert with styled message
+        setAlertMessage('Message sent successfully!');
+        setAlertType('success');
         // Clear form
         setFormData({
           name: '',
@@ -48,11 +64,15 @@ function Contact() {
           message: ''
         });
       } else {
-        alert(result.message || 'Failed to send message.');
+        // CHANGED: Replaced alert with styled message
+        setAlertMessage(result.message || 'Failed to send message.');
+        setAlertType('error');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to send message. Please check console for details.');
+      // CHANGED: Replaced alert with styled message
+      setAlertMessage('Failed to send message. Please try again later.');
+      setAlertType('error');
     } finally {
       setIsLoading(false);
     }
@@ -65,6 +85,13 @@ function Contact() {
         <p className="contact-intro">
           Get in touch with me for opportunities or just to say hello!
         </p>
+        
+        {/* CHANGED: Added styled alert component */}
+        {alertMessage && (
+          <div className={`alert alert-${alertType}`}>
+            {alertMessage}
+          </div>
+        )}
         
         <div className="contact-content">
           <div className="contact-info">
