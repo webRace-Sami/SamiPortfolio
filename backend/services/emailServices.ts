@@ -39,6 +39,12 @@ export const sendContactEmail = async (emailData: EmailData): Promise<any> => {
     return { error: 'Missing recipient address (CONTACT_RECEIVER_EMAIL)' };
   }
 
+  // Basic format check for sender (must include an @)
+  if (!/[@]/.test(fromAddr as string)) {
+    console.error('RESEND_FROM does not appear to be a valid email address:', fromAddr);
+    return { error: 'Invalid sender address (RESEND_FROM). Must include an email like "Name <you@yourdomain.com>" or "you@yourdomain.com"' };
+  }
+
   const subject = `Portfolio Contact: ${emailData.subject}`;
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -57,16 +63,28 @@ export const sendContactEmail = async (emailData: EmailData): Promise<any> => {
   `;
 
   try {
+    // Mask addresses for logs (don't print full secrets)
+    const mask = (s?: string) => typeof s === 'string' ? s.replace(/([^@\s])[\w.-]+@/, '$1***@') : s;
+    console.log('Attempting to send email via Resend', { from: mask(fromAddr as string), to: mask(toAddr as string) });
+
     const resp = await resend.emails.send({
       from: fromAddr as string,
       to: toAddr as string,
       subject,
       html,
       text: `${emailData.message}\n\nFrom: ${emailData.name} <${emailData.email}>`,
-  replyTo: `${emailData.name} <${emailData.email}>`,
+      replyTo: `${emailData.name} <${emailData.email}>`,
     });
+
+    // Resend SDK sometimes returns a response object with an `error` property
+    // instead of throwing. Treat that as a failure so callers get consistent results.
+    if (resp && (resp as any).error) {
+      console.error('❌ Resend response contained error', (resp as any).error);
+      return { error: (resp as any).error };
+    }
+
     console.log('✅ Email sent via Resend', resp);
-    return resp;
+    return { data: resp };
   } catch (err) {
     console.error('❌ Resend send error:', err);
     return { error: String(err) };
