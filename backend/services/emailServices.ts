@@ -26,13 +26,15 @@ export const sendContactEmail = async (emailData: EmailData): Promise<any> => {
     return { error: 'Resend SDK not available' };
   }
 
-  const fromAddr = process.env.RESEND_FROM || process.env.SMTP_FROM || process.env.SMTP_USER;
+  // Prefer an explicit RESEND_FROM; if missing, fall back to CONTACT_RECEIVER_EMAIL
+  // so the server can still attempt sending. Log a warning so this is visible
+  // in deployment logs. Note: Resend may still reject sends from unverified addresses.
+  const fromAddr = process.env.RESEND_FROM || process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_FROM || process.env.SMTP_USER;
   const toAddr = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
 
-  // Validate required fields for Resend
   if (!fromAddr) {
-    console.error('Missing RESEND_FROM (or SMTP_FROM/SMTP_USER). Aborting send.');
-    return { error: 'Missing sender address (RESEND_FROM)' };
+    console.error('No sender address configured (RESEND_FROM / CONTACT_RECEIVER_EMAIL / SMTP_*). Aborting send.');
+    return { error: 'Missing sender address (RESEND_FROM or CONTACT_RECEIVER_EMAIL)' };
   }
   if (!toAddr) {
     console.error('Missing CONTACT_RECEIVER_EMAIL (or SMTP_USER). Aborting send.');
@@ -41,8 +43,12 @@ export const sendContactEmail = async (emailData: EmailData): Promise<any> => {
 
   // Basic format check for sender (must include an @)
   if (!/[@]/.test(fromAddr as string)) {
-    console.error('RESEND_FROM does not appear to be a valid email address:', fromAddr);
-    return { error: 'Invalid sender address (RESEND_FROM). Must include an email like "Name <you@yourdomain.com>" or "you@yourdomain.com"' };
+    console.error('Configured sender does not appear to be a valid email address:', fromAddr);
+    return { error: 'Invalid sender address. Must include an email like "Name <you@yourdomain.com>" or "you@yourdomain.com"' };
+  }
+
+  if (!process.env.RESEND_FROM) {
+    console.warn('RESEND_FROM not set — falling back to', fromAddr, 'as sender. Consider setting RESEND_FROM in your env.');
   }
 
   const subject = `Portfolio Contact: ${emailData.subject}`;
