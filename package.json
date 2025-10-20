@@ -1,8 +1,7 @@
 {
   "dependencies": {
     "mongoose": "^8.19.1",
-  "resend": "latest",
-  "nodemailer": "^6.9.4"
+    "resend": "latest"
   },
   "devDependencies": {
     "@types/node": "^24.8.1"
