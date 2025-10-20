@@ -15,7 +15,17 @@ export const sendContactEmail = async (emailData: EmailData): Promise<any> => {
     return null;
   }
 
-  const resend = new Resend(apiKey);
+  let resend: any = null;
+  try {
+    // dynamic import so the server won't crash at startup if the package isn't present
+    const mod = await import('resend');
+    const Resend = mod.Resend || mod.default?.Resend || mod.default || mod;
+    resend = new Resend(apiKey);
+  } catch (impErr) {
+    console.error('Failed to import Resend SDK:', impErr);
+    return { error: 'Resend SDK not available' };
+  }
+
   const fromAddr = process.env.RESEND_FROM || process.env.SMTP_FROM || process.env.SMTP_USER;
   const toAddr = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
 
