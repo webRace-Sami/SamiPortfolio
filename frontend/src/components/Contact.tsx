@@ -83,7 +83,7 @@ function Contact() {
       <div className="contact-container">
         <h2>Contact Me</h2>
         <p className="contact-intro">
-          Get in touch with me for opportunities or just to say hello!
+          Have an idea in mind? Let's make it a reality. I'm currently available for new projects and collaborations. Send me a message, and let's talk about how we can work together.
         </p>
         
         {/* CHANGED: Added styled alert component */}
@@ -110,9 +110,9 @@ function Contact() {
             </div>
             
             <div className="social-links">
-              <a href="#" className="social-link">GitHub</a>
-              <a href="#" className="social-link">LinkedIn</a>
-              <a href="#" className="social-link">Twitter</a>
+              <a href="https://github.com/webRace-Sami" className="social-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/sami-ullah-215272277/" className="social-link">LinkedIn</a>
+              {/* <a href="#" className="social-link">Twitter</a> */}
             </div>
           </div>
           
